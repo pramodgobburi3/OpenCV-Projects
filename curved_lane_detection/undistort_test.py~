@@ -1,0 +1,15 @@
+import cv2
+from undistort import undistort
+
+img = cv2.imread('test_imgs/test3.jpg')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+dst = undistort(img)
+
+#Visualize distortion
+cv2.imshow('img', img)
+cv2.imshow('dst', dst)
+
+k = cv2.waitKey(5) & 0xFF
+if k==27:
+    cv2.destroyAllWindows()
+    pass

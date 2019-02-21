@@ -1,0 +1,34 @@
+import cv2
+import sys
+import matplotlib.pyplot as plt
+from perspective_warp import pipeline, perspective_warp
+from matplotlib.colors import hsv_to_rgb
+from sliding_window import sliding_window, get_curve 
+
+img = cv2.imread('test_imgs/test3.jpg')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+key = cv2.waitKey(5) & 0xFF
+if key==27:
+    cv2.destroyAllWindows()
+    pass
+dst = pipeline(img)
+dst = perspective_warp(dst, dst_size=(1280, 720))
+
+#Visualize undistortion
+f, (ax1, ax2) = plt.subplots(1, 2, figsize=(20,10))
+ax1.imshow(img)
+ax1.set_title('Original Image', fontsize=30)
+ax2.imshow(dst, cmap='gray')
+img_cv = img[:,:,::-1]
+cv2.imshow('img', img_cv)
+ax2.set_title('Warped Image', fontsize=30)
+
+out_img, curves, lanes, ploty = sliding_window(dst)
+curverad = get_curve(img, curves[0], curves[1])
+img_ = draw_lanes(img, curves[0], curves[1])
+plt.imshow(img_, cmap='hsv')
+plt.show()
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+

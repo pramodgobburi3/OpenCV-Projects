@@ -1,0 +1,20 @@
+import sys
+import cv2
+from perspective_warp import pipeline, perspective_warp
+
+cap = cv2.VideoCapture('videos/' + str(sys.argv[1]))
+
+while(cap.isOpened()):
+    ret, frame = cap.read()
+    pipeline_img = pipeline(frame)
+    perspective_img = perspective_warp(frame)
+
+    cv2.imshow('pipeline', pipeline_img)
+    cv2.imshow('perspective', perspective_img)
+
+    key = cv2.waitKey(5) & 0xFF
+    if key == 27:
+        break
+
+cap.release()
+cv2.destroyAllWindows()
